@@ -23,16 +23,16 @@
   <meta name="description" content="来了来了来了!!重排与重绘——渲染性能问题重要抓手!!! 所以什么是重排？啊我不知道！没听过啊？哈哈哈!!!当我们的操作引发了DOM 几何尺寸的变化（比如修改元素的宽、高或隐藏元素等）时，浏览器需要重新计算元素的几何属性（其他元素的几何属性和位置也会因此受到影响），然后再将计算的结果绘制出来。这个过程就是重排，重排也叫回流，简单的说就是重新生成布局，重新排列元素。 简而言之，重排多数情况下是由对元">
 <meta property="og:type" content="article">
 <meta property="og:title" content="重绘与重排是什么鬼？">
-<meta property="og:url" content="https://lyyb.github.io/glennley.github.io/2021/05/27/js/index.html">
+<meta property="og:url" content="https://lyyb.github.io/glennley.github.io/2021/05/27/Redraw&&reflow/index.html">
 <meta property="og:site_name" content="GlennLey&#39;s Blog">
 <meta property="og:description" content="来了来了来了!!重排与重绘——渲染性能问题重要抓手!!! 所以什么是重排？啊我不知道！没听过啊？哈哈哈!!!当我们的操作引发了DOM 几何尺寸的变化（比如修改元素的宽、高或隐藏元素等）时，浏览器需要重新计算元素的几何属性（其他元素的几何属性和位置也会因此受到影响），然后再将计算的结果绘制出来。这个过程就是重排，重排也叫回流，简单的说就是重新生成布局，重新排列元素。 简而言之，重排多数情况下是由对元">
 <meta property="og:locale">
 <meta property="article:published_time" content="2021-05-26T20:29:49.000Z">
-<meta property="article:modified_time" content="2021-05-26T20:45:25.000Z">
+<meta property="article:modified_time" content="2021-05-26T20:48:26.000Z">
 <meta property="article:author" content="GlennLey">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://lyyb.github.io/glennley.github.io/2021/05/27/js/">
+<link rel="canonical" href="https://lyyb.github.io/glennley.github.io/2021/05/27/Redraw&&reflow/">
 
 
 <script id="page-configurations">
@@ -165,7 +165,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh">
-    <link itemprop="mainEntityOfPage" href="https://lyyb.github.io/glennley.github.io/2021/05/27/js/">
+    <link itemprop="mainEntityOfPage" href="https://lyyb.github.io/glennley.github.io/2021/05/27/Redraw&&reflow/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/glennley.github.io/images/avatar.gif">
@@ -189,7 +189,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-05-27 04:29:49 / Modified: 04:45:25" itemprop="dateCreated datePublished" datetime="2021-05-27T04:29:49+08:00">2021-05-27</time>
+              <time title="Created: 2021-05-27 04:29:49 / Modified: 04:48:26" itemprop="dateCreated datePublished" datetime="2021-05-27T04:29:49+08:00">2021-05-27</time>
             </span>
 
           
@@ -205,36 +205,18 @@
       
         <p>来了来了来了!!<br>重排与重绘——渲染性能问题重要抓手!!!</p>
 <p>所以什么是重排？<br>啊我不知道！没听过啊？哈哈哈!!!<br>当我们的操作引发了DOM 几何尺寸的变化（比如修改元素的宽、高或隐藏元素等）时，浏览器需要重新计算元素的几何属性（其他元素的几何属性和位置也会因此受到影响），然后再将计算的结果绘制出来。这个过程就是重排，重排也叫回流，简单的说就是重新生成布局，重新排列元素。</p>
-<p>简而言之，重排多数情况下是由对元素几何属性的修改引发的。</p>
-<pre><code class="&lt;style&gt;">  #target &#123;
-    width: 100px;
-    height: 100px;
-  &#125;
-&lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;div id=&quot;target&quot;&gt;
-  &lt;span id=&quot;targetText&quot;&gt;我是一个小测试&lt;/span&gt;
-&lt;/div&gt;
-&lt;/body&gt;
+<p>简而言之，重排多数情况下是由对元素几何属性的修改引发的。<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">    #target &#123;</span><br><span class="line">      width: 100px;</span><br><span class="line">      height: 100px;</span><br><span class="line">    &#125;</span><br><span class="line">  &lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">  &lt;div id=&quot;target&quot;&gt;</span><br><span class="line">    &lt;span id=&quot;targetText&quot;&gt;我是一个小测试&lt;/span&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">````</span><br><span class="line">var targetDom = document.getElementById(&#x27;target&#x27;);</span><br><span class="line">targetDom.style.width = &#x27;200px&#x27;;</span><br><span class="line"></span><br><span class="line">这样的一个修改宽度的动作，不仅影响了盒模型本身的“占地面积”、还会整个页面中其它元素的布局形式。浏览器不得不重新针对布局信息进行计算，这就是典型的重排过程。</span><br><span class="line"></span><br><span class="line">面试官问重排优化建议：</span><br><span class="line">重排的代价是高昂的，会破坏用户体验，并且让UI展示非常迟缓。通过减少重排的负面影响来提高用户体验的最简单方式就是尽可能的减少重排次数，重排范围。下面是一些行之有效的建议，大家可以用来参考。</span><br><span class="line">So 建议呢？？</span><br><span class="line">减少重排范围</span><br><span class="line">我们应该尽量以局部布局的形式组织html结构，尽可能小的影响重排的范围。</span><br><span class="line">尽可能在低层级的DOM节点上，而不是像上述全局范围的示例代码一样，如果你要改变p的样式，class就不要加在div上，通过父元素去影响子元素不好。</span><br><span class="line">不要使用 table 布局，可能很小的一个小改动会造成整个 table 的重新布局。那么在不得已使用table的场合，可以设置table-layout:auto;或者是table-layout:fixed这样可以让table一行一行的渲染，这种做法也是为了限制reflow的影响范围。</span><br><span class="line"></span><br><span class="line">减少重排次数</span><br><span class="line">1.样式集中改变</span><br><span class="line">不要频繁的操作样式，对于一个静态页面来说，明智且可维护的做法是更改类名而不是修改样式，对于动态改变的样式来说，相较每次微小修改都直接触及元素，更好的办法是统一在 cssText 变量中编辑。虽然现在大部分现代浏览器都会有 Flush 队列进行渲染队列优化，但是有些老版本的浏览器比如IE6的效率依然低下。</span><br><span class="line">2.分离读写操作</span><br><span class="line">DOM 的多个读操作（或多个写操作），应该放在一起。不要两个读操作之间，加入一个写操作。</span><br><span class="line"></span><br><span class="line">3.将 DOM 离线</span><br><span class="line">“离线”意味着不在当前的 DOM 树中做修改，我们可以这样做：</span><br><span class="line">使用 display:none</span><br><span class="line">一旦我们给元素设置 display:none 时（只有一次重排重绘），元素便不会再存在在渲染树中，相当于将其从页面上“拿掉”，我们之后的操作将不会触发重排和重绘，添加足够多的变更后，通过 display属性显示（另一次重排重绘）。通过这种方式即使大量变更也只触发两次重排。另外，visibility : hidden 的元素只对重绘有影响，不影响重排。</span><br><span class="line">通过 documentFragment 创建一个 dom 碎片,在它上面批量操作 dom，操作完成之后，再添加到文档中，这样只会触发一次重排。</span><br><span class="line">复制节点，在副本上工作，然后替换它！</span><br><span class="line"></span><br><span class="line">4.使用 absolute 或 fixed 脱离文档流</span><br><span class="line">使用绝对定位会使的该元素单独成为渲染树中 body 的一个子元素，重排开销比较小，不会对其它节点造成太多影响。当你在这些节点上放置这个元素时，一些其它在这个区域内的节点可能需要重绘，但是不需要重排。</span><br><span class="line"></span><br><span class="line">5.优化动画</span><br><span class="line">可以把动画效果应用到 position属性为 absolute 或 fixed 的元素上，这样对其他元素影响较小。</span><br><span class="line">动画效果还应牺牲一些平滑，来换取速度，这中间的度自己衡量： 比如实现一个动画，以1个像素为单位移动这样最平滑，但是Layout就会过于频繁，大量消耗CPU资源，如果以3个像素为单位移动则会好很多</span><br><span class="line">启用GPU加速 GPU 硬件加速是指应用 GPU 的图形性能对浏览器中的一些图形操作交给 GPU 来完成，因为 GPU 是专门为处理图形而设计，所以它在速度和能耗上更有效率。</span><br><span class="line">GPU 加速通常包括以下几个部分：Canvas2D，布局合成, CSS3转换（transitions），CSS3 3D变换（transforms），WebGL和视频(video)。</span><br><span class="line"></span><br><span class="line">面试官问：还有什么动作会触发重排？</span><br><span class="line"></span><br><span class="line">注意，重排多数情况下是由对元素几何属性的修改引发的，但不总是由此引发的。面试官区分新手和老手的关键，当然我是新手。以下操作也会触发重排：</span><br><span class="line">改变 DOM 树的结构</span><br><span class="line">这里主要指的是节点的增减、移动等操作。</span><br><span class="line">获取一些特定属性的值（重要！！）</span><br><span class="line">如offsetTop、offsetLeft、 offsetWidth、offsetHeight、scrollTop、scrollLeft、scrollWidth、scrollHeight、clientTop、clientLeft、clientWidth、clientHeight 等属性（挑几个背下来，答题的时候不要哑了！嘻嘻）。</span><br><span class="line"></span><br><span class="line">这些属性有一个共性，就是需要通过即时计算得到。因此浏览器为了获取这些值，也会进行回流。</span><br><span class="line">除此之外，当我们调用了 getComputedStyle 方法，或者 IE 里的 currentStyle 时，也会触发回流。原理是一样的，都为求一个“即时性”和“准确性”。</span><br><span class="line"></span><br><span class="line">重绘什么是鬼？?</span><br><span class="line">当我们对 DOM 的修改导致了样式的变化、却并未影响其几何属性 （比如修改了颜色或背景色）时，浏览器不需重新计算元素的几何属性、直接为该元素绘制新的样式（跳过了上图所示的回流环节）。这个过程叫做重绘。</span><br><span class="line">简而言之，重绘是由对元素绘制属性的修改引发的。</span><br><span class="line"></span><br><span class="line">举个例子，仍然沿用上文的demo，假如修改了 targetText 的颜色：</span><br></pre></td></tr></table></figure><br>var targetDom = document.getElementById(‘targetText’);<br>targetDom.style.color = ‘red’;</p>
+<pre><code>
+浏览器要想改变文字的颜色，只需要去变更像素点的色值即可，不涉及任何布局计算。因此，这是一个典型的重绘过程。
+
+
+“针对页面渲染流程中的性能优化，你有什么思路？”——当面试官抛出这个问题时，不管你对性能优化掌握到什么程度、对渲染原理是否自信，我反手盲答一波重排与重绘，至少说明不是一个彻头彻尾的小白hhh。
+
+
+总结一下吧！
+
+重排比重绘消耗的性能要大,重绘不一定导致重排，但重排一定会导致重绘。
 </code></pre>
-<p>var targetDom = document.getElementById(‘target’);<br>targetDom.style.width = ‘200px’;</p>
-<p>这样的一个修改宽度的动作，不仅影响了盒模型本身的“占地面积”、还会整个页面中其它元素的布局形式。浏览器不得不重新针对布局信息进行计算，这就是典型的重排过程。</p>
-<p>面试官问重排优化建议：<br>重排的代价是高昂的，会破坏用户体验，并且让UI展示非常迟缓。通过减少重排的负面影响来提高用户体验的最简单方式就是尽可能的减少重排次数，重排范围。下面是一些行之有效的建议，大家可以用来参考。<br>So 建议呢？？<br>减少重排范围<br>我们应该尽量以局部布局的形式组织html结构，尽可能小的影响重排的范围。<br>尽可能在低层级的DOM节点上，而不是像上述全局范围的示例代码一样，如果你要改变p的样式，class就不要加在div上，通过父元素去影响子元素不好。<br>不要使用 table 布局，可能很小的一个小改动会造成整个 table 的重新布局。那么在不得已使用table的场合，可以设置table-layout:auto;或者是table-layout:fixed这样可以让table一行一行的渲染，这种做法也是为了限制reflow的影响范围。</p>
-<p>减少重排次数<br>1.样式集中改变<br>不要频繁的操作样式，对于一个静态页面来说，明智且可维护的做法是更改类名而不是修改样式，对于动态改变的样式来说，相较每次微小修改都直接触及元素，更好的办法是统一在 cssText 变量中编辑。虽然现在大部分现代浏览器都会有 Flush 队列进行渲染队列优化，但是有些老版本的浏览器比如IE6的效率依然低下。<br>2.分离读写操作<br>DOM 的多个读操作（或多个写操作），应该放在一起。不要两个读操作之间，加入一个写操作。</p>
-<p>3.将 DOM 离线<br>“离线”意味着不在当前的 DOM 树中做修改，我们可以这样做：<br>使用 display:none<br>一旦我们给元素设置 display:none 时（只有一次重排重绘），元素便不会再存在在渲染树中，相当于将其从页面上“拿掉”，我们之后的操作将不会触发重排和重绘，添加足够多的变更后，通过 display属性显示（另一次重排重绘）。通过这种方式即使大量变更也只触发两次重排。另外，visibility : hidden 的元素只对重绘有影响，不影响重排。<br>通过 documentFragment 创建一个 dom 碎片,在它上面批量操作 dom，操作完成之后，再添加到文档中，这样只会触发一次重排。<br>复制节点，在副本上工作，然后替换它！</p>
-<p>4.使用 absolute 或 fixed 脱离文档流<br>使用绝对定位会使的该元素单独成为渲染树中 body 的一个子元素，重排开销比较小，不会对其它节点造成太多影响。当你在这些节点上放置这个元素时，一些其它在这个区域内的节点可能需要重绘，但是不需要重排。</p>
-<p>5.优化动画<br>可以把动画效果应用到 position属性为 absolute 或 fixed 的元素上，这样对其他元素影响较小。<br>动画效果还应牺牲一些平滑，来换取速度，这中间的度自己衡量： 比如实现一个动画，以1个像素为单位移动这样最平滑，但是Layout就会过于频繁，大量消耗CPU资源，如果以3个像素为单位移动则会好很多<br>启用GPU加速 GPU 硬件加速是指应用 GPU 的图形性能对浏览器中的一些图形操作交给 GPU 来完成，因为 GPU 是专门为处理图形而设计，所以它在速度和能耗上更有效率。<br>GPU 加速通常包括以下几个部分：Canvas2D，布局合成, CSS3转换（transitions），CSS3 3D变换（transforms），WebGL和视频(video)。</p>
-<p>面试官问：还有什么动作会触发重排？</p>
-<p>注意，重排多数情况下是由对元素几何属性的修改引发的，但不总是由此引发的。面试官区分新手和老手的关键，当然我是新手。以下操作也会触发重排：<br>改变 DOM 树的结构<br>这里主要指的是节点的增减、移动等操作。<br>获取一些特定属性的值（重要！！）<br>如offsetTop、offsetLeft、 offsetWidth、offsetHeight、scrollTop、scrollLeft、scrollWidth、scrollHeight、clientTop、clientLeft、clientWidth、clientHeight 等属性（挑几个背下来，答题的时候不要哑了！嘻嘻）。</p>
-<p>这些属性有一个共性，就是需要通过即时计算得到。因此浏览器为了获取这些值，也会进行回流。<br>除此之外，当我们调用了 getComputedStyle 方法，或者 IE 里的 currentStyle 时，也会触发回流。原理是一样的，都为求一个“即时性”和“准确性”。</p>
-<p>重绘什么是鬼？?<br>当我们对 DOM 的修改导致了样式的变化、却并未影响其几何属性 （比如修改了颜色或背景色）时，浏览器不需重新计算元素的几何属性、直接为该元素绘制新的样式（跳过了上图所示的回流环节）。这个过程叫做重绘。<br>简而言之，重绘是由对元素绘制属性的修改引发的。</p>
-<p>举个例子，仍然沿用上文的demo，假如修改了 targetText 的颜色：<br>var targetDom = document.getElementById(‘targetText’);<br>targetDom.style.color = ‘red’;</p>
-<p>浏览器要想改变文字的颜色，只需要去变更像素点的色值即可，不涉及任何布局计算。因此，这是一个典型的重绘过程。</p>
-<p>“针对页面渲染流程中的性能优化，你有什么思路？”——当面试官抛出这个问题时，不管你对性能优化掌握到什么程度、对渲染原理是否自信，我反手盲答一波重排与重绘，至少说明不是一个彻头彻尾的小白hhh。</p>
-<p>总结一下吧！~</p>
-<p>重排比重绘消耗的性能要大：</p>
-<p>重绘不一定导致重排，但重排一定会导致重绘。</p>
 
     </div>
 
@@ -250,7 +232,7 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/glennley.github.io/2021/05/27/hello-world/" rel="prev" title="一切 好像才刚刚开始...">
+    <a href="/glennley.github.io/2021/05/27/index/" rel="prev" title="一切 好像才刚刚开始...">
       <i class="fa fa-chevron-left"></i> 一切 好像才刚刚开始...
     </a></div>
       <div class="post-nav-item"></div>
