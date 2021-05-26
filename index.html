@@ -185,7 +185,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-05-27 04:29:49 / Modified: 04:33:15" itemprop="dateCreated datePublished" datetime="2021-05-27T04:29:49+08:00">2021-05-27</time>
+              <time title="Created: 2021-05-27 04:29:49 / Modified: 04:36:13" itemprop="dateCreated datePublished" datetime="2021-05-27T04:29:49+08:00">2021-05-27</time>
             </span>
 
           
@@ -202,26 +202,7 @@
           <p>来了来了来了!!<br>重排与重绘——渲染性能问题重要抓手!!!</p>
 <p>所以什么是重排？<br>啊我不知道！没听过啊？哈哈哈<br>当我们的操作引发了 DOM 几何尺寸的变化（比如修改元素的宽、高或隐藏元素等）时，浏览器需要重新计算元素的几何属性（其他元素的几何属性和位置也会因此受到影响），然后再将计算的结果绘制出来。这个过程就是重排，重排也叫回流，简单的说就是重新生成布局，重新排列元素。</p>
 <p>简而言之，重排多数情况下是由对元素几何属性的修改引发的。</p>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>重排demo</title>
-  <style> 
-    #target {
-      width: 100px;
-      height: 100px;
-    }
-  </style>
-</head>
-<body>
-  <div id="target">
-    <span id="targetText">我是一个小测试</span>
-  </div>
-</body>
-</html>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">  &lt;style&gt; </span><br><span class="line">    #target &#123;</span><br><span class="line">      width: 100px;</span><br><span class="line">      height: 100px;</span><br><span class="line">    &#125;</span><br><span class="line">  &lt;/style&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">  &lt;div id=&quot;target&quot;&gt;</span><br><span class="line">    &lt;span id=&quot;targetText&quot;&gt;我是一个小测试&lt;/span&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var targetDom = document.getElementById(&#x27;target&#x27;);</span><br><span class="line">targetDom.style.width = &#x27;200px&#x27;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
       
     </div>
