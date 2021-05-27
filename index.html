@@ -174,7 +174,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/glennley.github.io/2021/05/27/array-unique/" class="post-title-link" itemprop="url">Untitled</a>
+            <a href="/glennley.github.io/2021/05/27/array-unique/" class="post-title-link" itemprop="url">常见的数组去重方式</a>
         </h2>
 
         <div class="post-meta">
@@ -185,7 +185,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-05-27 20:19:33 / Modified: 20:26:43" itemprop="dateCreated datePublished" datetime="2021-05-27T20:19:33+08:00">2021-05-27</time>
+              <time title="Created: 2021-05-27 20:19:33 / Modified: 20:30:57" itemprop="dateCreated datePublished" datetime="2021-05-27T20:19:33+08:00">2021-05-27</time>
             </span>
 
           
@@ -199,8 +199,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <hr>
-<h2 id="title-常见的数组去重方式"><a href="#title-常见的数组去重方式" class="headerlink" title="title: 常见的数组去重方式"></a>title: 常见的数组去重方式</h2><p>一、利用ES6 Set去重（ES6中最常用）</p>
+          <p>一、利用ES6 Set去重（ES6中最常用）</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var arr = [1,2,2,2,2,2,3,4]</span><br><span class="line">       //  利用ES6 Set去重（ES6中最常用）</span><br><span class="line">       function unique (arr)&#123;</span><br><span class="line">           return Array.from(new Set(arr))</span><br><span class="line">       &#125;</span><br><span class="line">       console.log(unique(arr));</span><br></pre></td></tr></table></figure>
 <p>不考虑兼容性，这种去重的方法代码量是最少的，但是这种方法无法去掉“{}”空对象。</p>
 <p>二、利用for嵌套for，然后splice去重（ES5中最常用）</p>
