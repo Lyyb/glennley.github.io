@@ -160,6 +160,79 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh">
+    <link itemprop="mainEntityOfPage" href="https://lyyb.github.io/glennley.github.io/2021/05/27/arrayUnique/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/glennley.github.io/images/avatar.gif">
+      <meta itemprop="name" content="GlennLey">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="GlennLey's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/glennley.github.io/2021/05/27/arrayUnique/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-05-27 20:19:33 / Modified: 20:22:35" itemprop="dateCreated datePublished" datetime="2021-05-27T20:19:33+08:00">2021-05-27</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <hr>
+<p>title: 常见的数组去重方式</p>
+<hr>
+<ul>
+<li><p>一、利用ES6 Set去重（ES6中最常用）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var arr = [1,2,2,2,2,2,3,4]</span><br><span class="line">       //  利用ES6 Set去重（ES6中最常用）</span><br><span class="line">       function unique (arr)&#123;</span><br><span class="line">           return Array.from(new Set(arr))</span><br><span class="line">       &#125;</span><br><span class="line">       console.log(unique(arr));</span><br></pre></td></tr></table></figure>
+<p>不考虑兼容性，这种去重的方法代码量是最少的，但是这种方法无法去掉“{}”空对象。</p>
+</li>
+<li><p>二、利用for嵌套for，然后splice去重（ES5中最常用）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">function unique(arr) &#123;</span><br><span class="line">        for (var i = 0; i &lt; arr.length; i++) &#123;</span><br><span class="line">            for (var j = i + 1; j &lt; arr.length; j++) &#123;</span><br><span class="line">                if (arr[i] == arr[j]) &#123;</span><br><span class="line">                    arr.splice(j, 1)</span><br><span class="line">                    j--</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return arr</span><br><span class="line">    &#125;</span><br><span class="line">    console.log(unique(arr));</span><br></pre></td></tr></table></figure></li>
+<li><p>三、利用indexOf去重</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// 利用indexOf去重</span><br><span class="line">       function unique (arr) &#123;</span><br><span class="line">           if (!Array.isArray(arr)) &#123;</span><br><span class="line">               console.log(&#x27;type error&#x27;);</span><br><span class="line">               return</span><br><span class="line">           &#125;</span><br><span class="line">           var array = []</span><br><span class="line">           for (var i = 0;i&lt;arr.length;i++) &#123;</span><br><span class="line">               if(array.indexOf(arr[i]) === -1)&#123;</span><br><span class="line">                   array.push(arr[i])</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">           return array</span><br><span class="line">       &#125;</span><br><span class="line">       console.log(unique(arr));</span><br></pre></td></tr></table></figure></li>
+<li><p>四、利用对象属性去重</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">function unique(arr) &#123;</span><br><span class="line"> if (!Array.isArray(arr)) &#123; </span><br><span class="line">     console.log(&#x27;type error!&#x27;) </span><br><span class="line">     return &#125; </span><br><span class="line">     let res = [], </span><br><span class="line">      obj = &#123;&#125; </span><br><span class="line">    for (let i = 0; i &lt; arr.length; i++) &#123; </span><br><span class="line">       if (!obj[arr[i]]) &#123;</span><br><span class="line">           res.push(arr[i]) obj[arr[i]] = 1</span><br><span class="line">       &#125; else &#123;</span><br><span class="line">        obj[arr[i]]++ </span><br><span class="line">        &#125; &#125; </span><br><span class="line">        return res </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh">
     <link itemprop="mainEntityOfPage" href="https://lyyb.github.io/glennley.github.io/2021/05/27/extends/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -622,7 +695,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/glennley.github.io/archives">
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
