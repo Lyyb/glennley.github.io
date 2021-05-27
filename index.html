@@ -160,6 +160,91 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh">
+    <link itemprop="mainEntityOfPage" href="https://lyyb.github.io/glennley.github.io/2021/05/27/extends/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/glennley.github.io/images/avatar.gif">
+      <meta itemprop="name" content="GlennLey">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="GlennLey's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/glennley.github.io/2021/05/27/extends/" class="post-title-link" itemprop="url">常见的继承方式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-05-27 20:12:23 / Modified: 20:18:32" itemprop="dateCreated datePublished" datetime="2021-05-27T20:12:23+08:00">2021-05-27</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ul>
+<li>1.原型链继承</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">function Parent () &#123;</span><br><span class="line">    this.name = &#x27;glennley&#x27;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Parent.prototype.getName = function () &#123;</span><br><span class="line">    console.log(this.name);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function Child () &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Child.prototype = new Parent();</span><br><span class="line"></span><br><span class="line">var child1 = new Child();</span><br><span class="line"></span><br><span class="line">console.log(child1.getName()) // glennley</span><br></pre></td></tr></table></figure>
+<p>原型链继承方式中，引用类型的属性被所有实例共享</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">function Parent () &#123;</span><br><span class="line">    this.names = [&#x27;glennley&#x27;, &#x27;daisy&#x27;];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function Child () &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Child.prototype = new Parent();</span><br><span class="line"></span><br><span class="line">var child1 = new Child();</span><br><span class="line"></span><br><span class="line">child1.names.push(&#x27;yayu&#x27;);</span><br><span class="line"></span><br><span class="line">console.log(child1.names); </span><br><span class="line">// [&quot;glennley&quot;, &quot;daisy&quot;, &quot;yayu&quot;]</span><br><span class="line"></span><br><span class="line">var child2 = new Child();</span><br><span class="line"></span><br><span class="line">console.log(child2.names); </span><br><span class="line">// [&quot;glennley&quot;, &quot;daisy&quot;, &quot;yayu&quot;]</span><br></pre></td></tr></table></figure>
+<p>在创建 Child 的实例时，不能向Parent传参</p>
+<ul>
+<li>2.借用构造函数(经典继承)<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">function Parent () &#123;</span><br><span class="line">    this.names = [&#x27;glennley&#x27;, &#x27;daisy&#x27;];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function Child () &#123;</span><br><span class="line">    Parent.call(this);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var child1 = new Child();</span><br><span class="line"></span><br><span class="line">child1.names.push(&#x27;yayu&#x27;);</span><br><span class="line"></span><br><span class="line">console.log(child1.names); // [&quot;glennley&quot;, &quot;daisy&quot;, &quot;yayu&quot;]</span><br><span class="line"></span><br><span class="line">var child2 = new Child();</span><br><span class="line"></span><br><span class="line">console.log(child2.names); // [&quot;glennley&quot;, &quot;daisy&quot;]</span><br></pre></td></tr></table></figure></li>
+<li>优点：</li>
+</ul>
+<ol>
+<li>避免了引用类型的属性被所有实例共享</li>
+<li>可以在 Child 中向 Parent 传参</li>
+<li>方法都在构造函数中定义，每次创建实例都会创建一遍方法。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">function Parent (name) &#123;</span><br><span class="line">    this.name = name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function Child (name) &#123;</span><br><span class="line">    Parent.call(this, name);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var child1 = new Child(&#x27;glennley&#x27;);</span><br><span class="line"></span><br><span class="line">console.log(child1.name); // glennley</span><br><span class="line"></span><br><span class="line">var child2 = new Child(&#x27;daisy&#x27;);</span><br><span class="line"></span><br><span class="line">console.log(child2.name); // daisy</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>3、组合继承</li>
+</ul>
+<p>原理：使用原型链实现对原型属性和方法的继承，借用构造函数实现对实例属性的继承。<br>结合原型继承和构造函数的继承方法，对之进行优化，达到即可继承原型的方法，引用类型也不会被所有实例所共享。<br>原型链继承和经典继承结合体。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">function Parent (name) &#123;</span><br><span class="line">    this.name = name;</span><br><span class="line">    this.colors = [&#x27;red&#x27;, &#x27;blue&#x27;, &#x27;green&#x27;];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Parent.prototype.getName = function () &#123;</span><br><span class="line">    console.log(this.name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function Child (name, age) &#123;</span><br><span class="line"></span><br><span class="line">    Parent.call(this, name);</span><br><span class="line">    </span><br><span class="line">    this.age = age;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Child.prototype = new Parent();</span><br><span class="line">Child.prototype.constructor = Child;</span><br><span class="line"></span><br><span class="line">var child1 = new Child(&#x27;glennley&#x27;, &#x27;18&#x27;);</span><br><span class="line"></span><br><span class="line">child1.colors.push(&#x27;black&#x27;);</span><br><span class="line"></span><br><span class="line">console.log(child1.name); // glennley</span><br><span class="line">console.log(child1.age); // 18</span><br><span class="line">console.log(child1.colors); // [&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;, &quot;black&quot;]</span><br><span class="line"></span><br><span class="line">var child2 = new Child(&#x27;daisy&#x27;, &#x27;20&#x27;);</span><br><span class="line"></span><br><span class="line">console.log(child2.name); // daisy</span><br><span class="line">console.log(child2.age); // 20</span><br><span class="line">console.log(child2.colors); // [&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>优点：融合原型链继承和构造函数的优点，是 JavaScript 中最常用的继承模式。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh">
     <link itemprop="mainEntityOfPage" href="https://lyyb.github.io/glennley.github.io/2021/05/27/promise/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -537,7 +622,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/glennley.github.io/archives">
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
