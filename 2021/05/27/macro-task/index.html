@@ -28,7 +28,7 @@
 <meta property="og:description" content="从一道面试题说起 12345678910111213141516console.log(1)setTimeout(function() &amp;#123;  console.log(2)&amp;#125;)new Promise(function (resolve) &amp;#123;  console.log(3)  resolve() &amp;#125;).then(function () &amp;#123;  conso">
 <meta property="og:locale">
 <meta property="article:published_time" content="2021-05-27T11:47:45.000Z">
-<meta property="article:modified_time" content="2021-05-27T11:54:43.000Z">
+<meta property="article:modified_time" content="2021-05-27T11:57:14.000Z">
 <meta property="article:author" content="GlennLey">
 <meta name="twitter:card" content="summary">
 
@@ -189,7 +189,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-05-27 19:47:45 / Modified: 19:54:43" itemprop="dateCreated datePublished" datetime="2021-05-27T19:47:45+08:00">2021-05-27</time>
+              <time title="Created: 2021-05-27 19:47:45 / Modified: 19:57:14" itemprop="dateCreated datePublished" datetime="2021-05-27T19:47:45+08:00">2021-05-27</time>
             </span>
 
           
@@ -222,15 +222,15 @@
 </ul>
 <p>常见的宏任务比如： setTimeout、setInterval、 setImmediate、 script（整体代码）、I/O 操作等。<br>常见的微任务比如: process.nextTick、Promise、MutationObserver 等<br>注意：script（整体代码）它也是一个宏任务；此外，宏任务中的 setImmediate、微任务中的 process.nextTick 这些都是 Node 独有的。</p>
 <ul>
-<li>循环过程解读<br>基于对 宏任务 和 微任务 的认知，我们来走一遍完整的事件循环过程。<br>一个完整的 Event Loop 过程，可以概括为以下阶段：<pre><code>1. 执行并出队一个  宏任务。注意如果是初始状态：调用栈空。micro 队列空， 宏任务 队列里有且只有一个 script 脚本（整体代码）。这时首先执行并出队的就是 script 脚本；
-2.全局上下文（script 标签）被推入调用栈，同步代码执行。在执行的过程中，通过对一些接口的调用，可以产生新的  宏任务 与 微任务，它们会分别被推入各自的任务队列里。这个过程本质上是队列的  宏任务 的执行和出队的过程；
-3.上一步我们出队的是一个  宏任务这一步我们处理的是 微任务。但需要注意的是：当 宏任务 出队时，任务是一个一个执行的；而微任务 出队时，任务是一队一队执行的。因此，我们处理 micro 队列这一步，会逐个执行队列中的任务并把它出队，直到队列被清空；
+<li>循环过程解读<br>基于对 宏任务 和 微任务 的认知，我们来走一遍完整的事件循环过程。<br>一个完整的 Event Loop 过程，可以概括为以下阶段：<pre><code>1. 执行并出队一个  宏任务。注意如果是初始状态：调用栈空。micro 队列空，宏任务 队列里有且只有一个 script 脚本（整体代码）。这时首先执行并出队的就是 script 脚本；
+2.全局上下文（script 标签）被推入调用栈，同步代码执行。在执行的过程中，通过对一些接口的调用，可以产生新的宏任务 与 微任务，它们会分别被推入各自的任务队列里。这个过程本质上是队列的宏任务的执行和出队的过程；
+3.上一步我们出队的是一个  宏任务这一步我们处理的是 微任务。但需要注意的是：当宏任务出队时，任务是一个一个执行的；而微任务出队时，任务是一队一队执行的。因此，我们处理 micro 队列这一步，会逐个执行队列中的任务并把它出队，直到队列被清空；
 4.执行渲染操作，更新界面；
 5.检查是否存在 Web worker 任务，如果有，则对其进行处理。
 </code></pre>
 </li>
 </ul>
-<p>总结一下：<br>    执行顺序: 同步代码 =&gt;  promise =&gt; then  =&gt; setTimeout</p>
+<p>总结一下：<br>    执行顺序: sync同步代码 =&gt;  promise =&gt; then  =&gt; setTimeout</p>
 
     </div>
 
