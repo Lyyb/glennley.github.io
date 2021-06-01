@@ -143,6 +143,73 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh">
+    <link itemprop="mainEntityOfPage" href="https://lyyb.github.io/glennley.github.io/2021/06/01/Vue-data/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/glennley.github.io/images/WechatIMG12.jpeg">
+      <meta itemprop="name" content="GlennLey">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="GlennLey's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/glennley.github.io/2021/06/01/Vue-data/" class="post-title-link" itemprop="url">为什么Vue中data必须是一个函数而不是对象？</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-06-01 23:35:09 / Modified: 23:44:36" itemprop="dateCreated datePublished" datetime="2021-06-01T23:35:09+08:00">2021-06-01</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><strong> 写在前面 </strong><br>可能很多小伙伴在面试的时候,经常有被问到为什么Vue中data必须是一个函数而不是对象？<br>emmmm…<br>其实答案并没有我们想的那么复杂…为什么呢？<br>为什么是这样子？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">data() &#123;</span><br><span class="line">    return &#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<p>而不是这样子呢？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">data : &#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其实不难发现…</p>
+<p>Vue中data是可以写成对象的,前提是要保证这个组件是不会被复用的,<br>我们都知道模块化开发,在这种场景下,由于组件的复用,其实我们可以理解成创建了多个Vue实例,<br>如果data中只是个对象,那么创建出来的实例都是同一个对象的引用。<br>简而言之，多个组件复用时，每次调用data函数的时候都会return一个新的对象，它们的内存地址都是不一样的，这样就不会相互影响。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh">
     <link itemprop="mainEntityOfPage" href="https://lyyb.github.io/glennley.github.io/2021/06/01/vue-template-compiler/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -865,7 +932,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/glennley.github.io/archives">
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
