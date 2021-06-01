@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/glennley.github.io/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/glennley.github.io/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/glennley.github.io/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/glennley.github.io/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/glennley.github.io/css/main.css">
+
+
+<link rel="stylesheet" href="/glennley.github.io/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/glennley.github.io/lib/pace/pace-theme-minimal.min.css">
+  <script src="/glennley.github.io/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lyyb.github.io","root":"/glennley.github.io/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="浅谈vue模板编译（template） 写在前面 起初上手的技术栈是Vue2.0, 而且工作中使用的技术栈也是Vue(2.0),空闲之余便会花时间去深入了解一些关于Vue的底层原理，并做出一些总结。  如果理解上存在偏差,还请指正~ 一起学习,一起进步!    开始上手   在此之前我们要理解什么是AST？   在计算机当中, 抽象语法树便是(Abstract Syntax Tree 缩写为AS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GlennLey&#39;s Blog">
+<meta property="og:url" content="https://lyyb.github.io/glennley.github.io/2021/06/01/vue-template-compiler/index.html">
+<meta property="og:site_name" content="GlennLey&#39;s Blog">
+<meta property="og:description" content="浅谈vue模板编译（template） 写在前面 起初上手的技术栈是Vue2.0, 而且工作中使用的技术栈也是Vue(2.0),空闲之余便会花时间去深入了解一些关于Vue的底层原理，并做出一些总结。  如果理解上存在偏差,还请指正~ 一起学习,一起进步!    开始上手   在此之前我们要理解什么是AST？   在计算机当中, 抽象语法树便是(Abstract Syntax Tree 缩写为AS">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-06-01T13:53:11.000Z">
+<meta property="article:modified_time" content="2021-06-01T15:21:56.000Z">
+<meta property="article:author" content="GlennLey">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lyyb.github.io/glennley.github.io/2021/06/01/vue-template-compiler/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh'
+  };
+</script>
+
+  <title> | GlennLey's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/glennley.github.io/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">GlennLey's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-begin">
+
+    <a href="/glennley.github.io/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Begin</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh">
+    <link itemprop="mainEntityOfPage" href="https://lyyb.github.io/glennley.github.io/2021/06/01/vue-template-compiler/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/glennley.github.io/images/WechatIMG12.jpeg">
+      <meta itemprop="name" content="GlennLey">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="GlennLey's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-06-01 21:53:11 / Modified: 23:21:56" itemprop="dateCreated datePublished" datetime="2021-06-01T21:53:11+08:00">2021-06-01</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<h2 id="浅谈vue模板编译（template）"><a href="#浅谈vue模板编译（template）" class="headerlink" title="浅谈vue模板编译（template）"></a>浅谈vue模板编译（template）</h2><ul>
+<li><p>写在前面<br> 起初上手的技术栈是Vue2.0, 而且工作中使用的技术栈也是Vue(2.0),空闲之余便会花时间去深入了解一些关于Vue的底层原理，并做出一些总结。</p>
+<p> 如果理解上存在偏差,还请指正~ 一起学习,一起进步!</p>
+</li>
+</ul>
+<ul>
+<li>开始上手</li>
+</ul>
+<p> <strong>在此之前我们要理解什么是AST？</strong></p>
+<p>  在计算机当中, 抽象语法树便是(Abstract Syntax Tree 缩写为AST),也可以理解成语法树(Syntax Tree), AST经过generate之后会得到render函数,而render函数返回的是Vnode,<br>  因此 Vnode便是Vue的虚拟DOM节点。</p>
+<ul>
+<li>初识compiler<br>平时我们使用费vue-cli创建项目的时候，经常性会在package.json中看到 “devDependencies”里面配置项有 “@vue/compiler-sfc”: “^3.0.0”的配置项,<br>那么我们就用它来测试一下,template文件被编译过后是什么样子呢？<br><strong>通过以下操作<strong></li>
+</ul>
+<ol>
+<li>首先我们需要创建一个文件夹,可手动创建也可通过mkdir的方式创建,接着我们把文件夹在终端中打开,推荐使用vscode工具,因为在vscode中集成了powershell（shell指令）。</li>
+<li>cd选择我们所创建出来的文件夹 cd 文件夹名字</li>
+<li>输入npm init -y（-y可省略对package.json的描述 默认）</li>
+<li>在当前文件夹新建index.js  也可以使用命令的方式 touch  index.js  (新建index.js)</li>
+<li>使用 npm i vue-template-compiler –save  /  npm install  vue-template-compiler -S</li>
+<li>在index.js 文件中引入 vue-template-compiler  const compiler = require(‘vue-template-compiler ‘)    - index.js<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line">const compiler = require(&#x27;vue-template-compiler&#x27;)</span><br><span class="line"></span><br><span class="line">// 插值</span><br><span class="line">// const template = `&lt;p&gt;&#123;&#123;message&#125;&#125;&lt;/p&gt;`</span><br><span class="line">// with(this)&#123;return createElement(&#x27;p&#x27;,[createTextVNode(toString(message))])&#125;</span><br><span class="line">// h -&gt; vnode</span><br><span class="line">// createElement -&gt; vnode</span><br><span class="line"></span><br><span class="line">// // 表达式</span><br><span class="line">// const template = `&lt;p&gt;&#123;&#123;flag ? message : &#x27;no message found&#x27;&#125;&#125;&lt;/p&gt;`</span><br><span class="line">// // with(this)&#123;return _c(&#x27;p&#x27;,[_v(_s(flag ? message : &#x27;no message found&#x27;))])&#125;</span><br><span class="line"></span><br><span class="line">// // 属性和动态属性</span><br><span class="line">// const template = `</span><br><span class="line">//     &lt;div id=&quot;div1&quot; class=&quot;container&quot;&gt;</span><br><span class="line">//         &lt;img :src=&quot;imgUrl&quot;/&gt;</span><br><span class="line">//     &lt;/div&gt;</span><br><span class="line">// `</span><br><span class="line">// with(this)&#123;return _c(&#x27;div&#x27;,</span><br><span class="line">//      &#123;staticClass:&quot;container&quot;,attrs:&#123;&quot;id&quot;:&quot;div1&quot;&#125;&#125;,</span><br><span class="line">//      [</span><br><span class="line">//          _c(&#x27;img&#x27;,&#123;attrs:&#123;&quot;src&quot;:imgUrl&#125;&#125;)])&#125;</span><br><span class="line"></span><br><span class="line">// // 条件</span><br><span class="line">// const template = `</span><br><span class="line">//     &lt;div&gt;</span><br><span class="line">//         &lt;p v-if=&quot;flag === &#x27;a&#x27;&quot;&gt;A&lt;/p&gt;</span><br><span class="line">//         &lt;p v-else&gt;B&lt;/p&gt;</span><br><span class="line">//     &lt;/div&gt;</span><br><span class="line">// `</span><br><span class="line">// with(this)&#123;return _c(&#x27;div&#x27;,[(flag === &#x27;a&#x27;)?_c(&#x27;p&#x27;,[_v(&quot;A&quot;)]):_c(&#x27;p&#x27;,[_v(&quot;B&quot;)])])&#125;</span><br><span class="line"></span><br><span class="line">// 循环</span><br><span class="line">// const template = `</span><br><span class="line">//     &lt;ul&gt;</span><br><span class="line">//         &lt;li v-for=&quot;item in list&quot; :key=&quot;item.id&quot;&gt;&#123;&#123;item.title&#125;&#125;&lt;/li&gt;</span><br><span class="line">//     &lt;/ul&gt;</span><br><span class="line">// `</span><br><span class="line">// with(this)&#123;return _c(&#x27;ul&#x27;,_l((list),function(item)&#123;return _c(&#x27;li&#x27;,&#123;key:item.id&#125;,[_v(_s(item.title))])&#125;),0)&#125;</span><br><span class="line"></span><br><span class="line">// 事件</span><br><span class="line">// const template = `</span><br><span class="line">//     &lt;button @click=&quot;clickHandler&quot;&gt;submit&lt;/button&gt;</span><br><span class="line">// `</span><br><span class="line">// with(this)&#123;return _c(&#x27;button&#x27;,&#123;on:&#123;&quot;click&quot;:clickHandler&#125;&#125;,[_v(&quot;submit&quot;)])&#125;</span><br><span class="line"></span><br><span class="line">// v-model</span><br><span class="line">const template = `&lt;input type=&quot;text&quot; v-model=&quot;name&quot;&gt;`</span><br><span class="line">// 主要观察 input 事件</span><br><span class="line">// with(this)&#123;return _c(&#x27;input&#x27;,&#123;directives:[&#123;name:&quot;model&quot;,rawName:&quot;v-model&quot;,value:(name),expression:&quot;name&quot;&#125;],attrs:&#123;&quot;type&quot;:&quot;text&quot;&#125;,domProps:&#123;&quot;value&quot;:(name)&#125;,on:&#123;&quot;input&quot;:function($event)&#123;if($event.target.composing)return;name=$event.target.value&#125;&#125;&#125;)&#125;</span><br><span class="line"></span><br><span class="line">// render 函数</span><br><span class="line">// 返回 vnode</span><br><span class="line">// patch</span><br><span class="line"></span><br><span class="line">// 编译</span><br><span class="line">const res = compiler.compile(template)</span><br><span class="line">console.log(res.render)</span><br><span class="line"></span><br><span class="line">// ---------------分割线--------------</span><br><span class="line"></span><br><span class="line">// // 从 vue 源码中找到缩写函数的含义</span><br><span class="line"> function installRenderHelpers (target) &#123;</span><br><span class="line">    target._o = markOnce // v-once render 处理</span><br><span class="line">    target._n = toNumber // 值转换 Number 处理</span><br><span class="line">    target._s = toString // 值转换 String 处理</span><br><span class="line">    target._l = renderList // v-for render 处理</span><br><span class="line">    target._t = renderSlot // slot 槽点 render 处理</span><br><span class="line">    target._q = looseEqual // 判断两个对象是否大体相等</span><br><span class="line">    target._i = looseIndexOf // 对等属性索引，不存在则返回 -1</span><br><span class="line">    target._m = renderStatic // 静态节点 render 处理</span><br><span class="line">    target._f = resolveFilter // filters 指令 render 处理</span><br><span class="line">    target._k = checkKeyCodes // checking keyCodes from config</span><br><span class="line">    target._b = bindObjectProps // v-bind render 处理，将 v-bind=&quot;object&quot; 的属性 merge 到VNode属性中</span><br><span class="line">    target._v = createTextVNode // 创建文本节点</span><br><span class="line">    target._e = createEmptyVNode // 创建空节点</span><br><span class="line">    target._u = resolveScopedSlots // scopeSlots render 处理</span><br><span class="line">    target._g = bindObjectListeners // v-on render 处理</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></li>
+<li>在终端中输入 node index.js 这个时候我们便可以在终端看到template被编译过后的代码</li>
+</ol>
+<ul>
+<li>编译过后的代码<br>通过打印出来的代码,我们可以得出结论,会看到一个with, 关于这个with我们大部分人或许没有见到过这个奇怪的用法,<br>但是在对作用域修改的时候,我们便会用到 with.<br><strong>举个例子</strong><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  var me = &#123;</span><br><span class="line">  name: &#x27;glennley&#x27;,</span><br><span class="line">  career: &#x27;coder&#x27;,</span><br><span class="line">  hobbies: [&#x27;coding&#x27;, &#x27;football&#x27;]</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+假如我们想输出对象 me 中的变量，没有 with 可能会这样做：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">console.log(me.name)</span><br><span class="line">console.log(me.career)</span><br><span class="line">console.log(me.hobbies)</span><br></pre></td></tr></table></figure>
+但with 可以帮助我们省去写前缀的时间</li>
+</ul>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">with(me) &#123;</span><br><span class="line">console.log(name)</span><br><span class="line">console.log(career)</span><br><span class="line">console.log(hobbies)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>  没错， with 就是当我们希望去引用一个对象内的多个属性的时候，一个 “偷懒” 的办法。</p>
+<p>  为什么说 with 可以 “改变” 词法作用域呢？我们再来看一个例子：</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">function changeName(person) &#123;</span><br><span class="line">with(person) &#123;</span><br><span class="line">    name = &#x27;GlennLey&#x27;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var me = &#123;</span><br><span class="line">name: &#x27;GlennLey&#x27;,</span><br><span class="line">career: &#x27;coder&#x27;,</span><br><span class="line">hobbies: [&#x27;coding&#x27;, &#x27;footbal&#x27;]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var you = &#123;</span><br><span class="line">career: &#x27;product manager&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">changeName(me)</span><br><span class="line">changeName(you)</span><br><span class="line">console.log(name) // 输出 &#x27;GlennLey&#x27;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>with 会原地创建一个全新的作用域，这个作用域内的变量集合，其实就是传入 with 的目标对象的属性集合。<br>因为 “创建” 这个动作，是在 with 代码实际已经被执行后发生的，所以这个新作用域确实是在运行时被添加的， with 因此也实现了对书写阶段就划分好的作用域进行修改。</p>
+<p>注意， with 对作用域的改变，仅仅在于 “创建” 这个动作。当这个作用域被创建出来之后，它的查询规则仍然遵循我们词法作用域的查询规则，所以它本能地 “探出头去”、去自己的上层作用域 —— 全局作用域查询</p>
+<p>tips：不要用 with 和 eval 写代码!!!<br>事实上， with 和 eval 因为其恼人的副作用（比如对语言性能的拖累、比如我们上面 “横空出世” 的全局变量等等），一直是我们 JS 程序员眼中的过街老鼠。实际编码中早就没人用了，我也极力推荐大家不要用。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/glennley.github.io/2021/05/27/typeof/" rel="prev" title="数据类型">
+      <i class="fa fa-chevron-left"></i> 数据类型
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%85%E8%B0%88vue%E6%A8%A1%E6%9D%BF%E7%BC%96%E8%AF%91%EF%BC%88template%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">浅谈vue模板编译（template）</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="GlennLey"
+      src="/glennley.github.io/images/WechatIMG12.jpeg">
+  <p class="site-author-name" itemprop="name">GlennLey</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/glennley.github.io/archives">
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/glennley.github.io/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">GlennLey</span>
+</div>
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/glennley.github.io/lib/anime.min.js"></script>
+  <script src="/glennley.github.io/lib/velocity/velocity.min.js"></script>
+  <script src="/glennley.github.io/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/glennley.github.io/js/utils.js"></script>
+
+<script src="/glennley.github.io/js/motion.js"></script>
+
+
+<script src="/glennley.github.io/js/schemes/pisces.js"></script>
+
+
+<script src="/glennley.github.io/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
