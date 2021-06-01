@@ -168,7 +168,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-06-01 21:53:11 / Modified: 23:28:08" itemprop="dateCreated datePublished" datetime="2021-06-01T21:53:11+08:00">2021-06-01</time>
+              <time title="Created: 2021-06-01 21:53:11 / Modified: 23:30:40" itemprop="dateCreated datePublished" datetime="2021-06-01T21:53:11+08:00">2021-06-01</time>
             </span>
 
           
@@ -219,6 +219,8 @@
 <p>with 会原地创建一个全新的作用域，这个作用域内的变量集合，其实就是传入 with 的目标对象的属性集合。<br>因为 “创建” 这个动作，是在 with 代码实际已经被执行后发生的，所以这个新作用域确实是在运行时被添加的， with 因此也实现了对书写阶段就划分好的作用域进行修改。</p>
 <p>注意， with 对作用域的改变，仅仅在于 “创建” 这个动作。当这个作用域被创建出来之后，它的查询规则仍然遵循我们词法作用域的查询规则，所以它本能地 “探出头去”、去自己的上层作用域 —— 全局作用域查询</p>
 <p>tips：不要用 with 和 eval 写代码!!!<br>事实上， with 和 eval 因为其恼人的副作用（比如对语言性能的拖累、比如我们上面 “横空出世” 的全局变量等等），一直是我们 JS 程序员眼中的过街老鼠。实际编码中早就没人用了，我也极力推荐大家不要用。</p>
+<p><strong>写在最后</strong></p>
+<p>通过模板编译之后,render函数最终会返回一个Vnode节点,在更新的时候,经过patch与之前的Vnode节点进行比较,最终将差异渲染到真实的DOM上.</p>
 
       
     </div>
