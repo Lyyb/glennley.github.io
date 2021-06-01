@@ -143,6 +143,88 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh">
+    <link itemprop="mainEntityOfPage" href="https://lyyb.github.io/glennley.github.io/2021/06/01/function/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/glennley.github.io/images/WechatIMG12.jpeg">
+      <meta itemprop="name" content="GlennLey">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="GlennLey's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/glennley.github.io/2021/06/01/function/" class="post-title-link" itemprop="url">普通函数和构造函数的本质区别</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-06-01 23:46:43" itemprop="dateCreated datePublished" datetime="2021-06-01T23:46:43+08:00">2021-06-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-06-02 00:08:27" itemprop="dateModified" datetime="2021-06-02T00:08:27+08:00">2021-06-02</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><strong>可能很多刚入门的小伙伴对于普通函数和构造函数之间的区别,一直分不清</strong><br>那么我们就来捋一捋他们之间的本质区别在哪？</p>
+<ol>
+<li>构造函数也是一个普通函数，在创建方式上和普通函数一样，只是构造函数通常首字母都是大写</li>
+<li>调用方式不一样，普通函数直接调用，构造函数要用关键字new来调用<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">function fn() &#123; &#125;</span><br><span class="line">    // 构造函数：1. new fn( )</span><br><span class="line">                    // 2 .构造函数(constructor)内部会创建一个新的对象，即f的实例</span><br><span class="line">                    // 3. 函数内部的this指向 新创建的f的实例</span><br><span class="line">                   //  4. 默认的返回值是f的实例</span><br><span class="line">    // 普通函数：1. fn( )</span><br><span class="line">                   //  2. 在调用函数的内部不会创建新的对象</span><br><span class="line">                   //  3. 函数内部的this指向调用函数的对象（如果没有对象调用，默认是window）</span><br><span class="line">                  //   4. 返回值由return语句决定</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ol>
+<ol start="3">
+<li><p>调用时，构造函数内部会创建一个新对象，就是实例，普通函数不会创建新对象<br>构造函数的返回值：<br>  有一个默认的返回值，新创建的对象（实例）；<br>  当手动添加返回值后（return语句）：</p>
+<pre><code>   1. 返回值是基本数据类型 --&gt;真正的返回值还是那个新创建的对象（实例）
+   2. 返回值是复杂数据类型（对象）--&gt;真正的返回值是这个对象
+</code></pre>
+</li>
+<li><p>构造函数内部的this指向实例，普通函数内部的this指向调用函数的对象（如果没有对象调用，默认为window）</p>
+</li>
+<li><p>构造函数默认的返回值是创建的对象（也就是实例），普通函数的返回值由return语句决定</p>
+</li>
+<li><p>构造函数的函数名与类名相同</p>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh">
     <link itemprop="mainEntityOfPage" href="https://lyyb.github.io/glennley.github.io/2021/06/01/Vue-data/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -932,7 +1014,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/glennley.github.io/archives">
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
