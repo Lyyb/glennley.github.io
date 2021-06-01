@@ -22,15 +22,15 @@
     var CONFIG = {"hostname":"lyyb.github.io","root":"/glennley.github.io/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="浅谈vue模板编译（template） 写在前面 起初上手的技术栈是Vue2.0, 而且工作中使用的技术栈也是Vue(2.0),空闲之余便会花时间去深入了解一些关于Vue的底层原理，并做出一些总结。  如果理解上存在偏差,还请指正~ 一起学习,一起进步!    开始上手   在此之前我们要理解什么是AST？   在计算机当中, 抽象语法树便是(Abstract Syntax Tree 缩写为AS">
+  <meta name="description" content="写在前面 起初上手的技术栈是Vue2.0, 而且工作中使用的技术栈也是Vue(2.0),空闲之余便会花时间去深入了解一些关于Vue的底层原理，并做出一些总结。  如果理解上存在偏差,还请指正~ 一起学习,一起进步!    开始上手   在此之前我们要理解什么是AST？   在计算机当中, 抽象语法树便是(Abstract Syntax Tree 缩写为AST),也可以理解成语法树(Syntax">
 <meta property="og:type" content="article">
-<meta property="og:title" content="GlennLey&#39;s Blog">
+<meta property="og:title" content="浅谈vue模板编译（template）">
 <meta property="og:url" content="https://lyyb.github.io/glennley.github.io/2021/06/01/vue-template-compiler/index.html">
 <meta property="og:site_name" content="GlennLey&#39;s Blog">
-<meta property="og:description" content="浅谈vue模板编译（template） 写在前面 起初上手的技术栈是Vue2.0, 而且工作中使用的技术栈也是Vue(2.0),空闲之余便会花时间去深入了解一些关于Vue的底层原理，并做出一些总结。  如果理解上存在偏差,还请指正~ 一起学习,一起进步!    开始上手   在此之前我们要理解什么是AST？   在计算机当中, 抽象语法树便是(Abstract Syntax Tree 缩写为AS">
+<meta property="og:description" content="写在前面 起初上手的技术栈是Vue2.0, 而且工作中使用的技术栈也是Vue(2.0),空闲之余便会花时间去深入了解一些关于Vue的底层原理，并做出一些总结。  如果理解上存在偏差,还请指正~ 一起学习,一起进步!    开始上手   在此之前我们要理解什么是AST？   在计算机当中, 抽象语法树便是(Abstract Syntax Tree 缩写为AST),也可以理解成语法树(Syntax">
 <meta property="og:locale">
 <meta property="article:published_time" content="2021-06-01T13:53:11.000Z">
-<meta property="article:modified_time" content="2021-06-01T15:21:56.000Z">
+<meta property="article:modified_time" content="2021-06-01T15:25:37.000Z">
 <meta property="article:author" content="GlennLey">
 <meta name="twitter:card" content="summary">
 
@@ -47,7 +47,7 @@
   };
 </script>
 
-  <title> | GlennLey's Blog</title>
+  <title>浅谈vue模板编译（template） | GlennLey's Blog</title>
   
 
 
@@ -161,7 +161,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          浅谈vue模板编译（template）
         </h1>
 
         <div class="post-meta">
@@ -172,7 +172,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-06-01 21:53:11 / Modified: 23:21:56" itemprop="dateCreated datePublished" datetime="2021-06-01T21:53:11+08:00">2021-06-01</time>
+              <time title="Created: 2021-06-01 21:53:11 / Modified: 23:25:37" itemprop="dateCreated datePublished" datetime="2021-06-01T21:53:11+08:00">2021-06-01</time>
             </span>
 
           
@@ -193,8 +193,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <hr>
-<h2 id="浅谈vue模板编译（template）"><a href="#浅谈vue模板编译（template）" class="headerlink" title="浅谈vue模板编译（template）"></a>浅谈vue模板编译（template）</h2><ul>
+        <ul>
 <li><p>写在前面<br> 起初上手的技术栈是Vue2.0, 而且工作中使用的技术栈也是Vue(2.0),空闲之余便会花时间去深入了解一些关于Vue的底层原理，并做出一些总结。</p>
 <p> 如果理解上存在偏差,还请指正~ 一起学习,一起进步!</p>
 </li>
@@ -305,7 +304,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%85%E8%B0%88vue%E6%A8%A1%E6%9D%BF%E7%BC%96%E8%AF%91%EF%BC%88template%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">浅谈vue模板编译（template）</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
