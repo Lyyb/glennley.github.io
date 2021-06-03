@@ -315,10 +315,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-06-01 21:53:11 / Modified: 23:31:50" itemprop="dateCreated datePublished" datetime="2021-06-01T21:53:11+08:00">2021-06-01</time>
+              <time title="Created: 2021-06-01 21:53:11" itemprop="dateCreated datePublished" datetime="2021-06-01T21:53:11+08:00">2021-06-01</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-06-03 15:39:06" itemprop="dateModified" datetime="2021-06-03T15:39:06+08:00">2021-06-03</time>
+              </span>
 
           
 
@@ -342,7 +348,7 @@
 <p> <strong>在此之前我们要理解什么是AST？</strong></p>
 <p>  在计算机当中, 抽象语法树便是(Abstract Syntax Tree 缩写为AST),也可以理解成语法树(Syntax Tree), AST经过generate之后会得到render函数,而render函数返回的是Vnode,<br>  因此 Vnode便是Vue的虚拟DOM节点。</p>
 <ul>
-<li>初识compiler<br>平时我们使用费vue-cli创建项目的时候，经常性会在package.json中看到 “devDependencies”里面配置项有 “@vue/compiler-sfc”: “^3.0.0”的配置项<br>那么我们就用它来测试一下,template文件被编译过后是什么样子呢？<br><strong>通过以下操作<strong></li>
+<li>初识compiler<br>平时我们使用vue-cli创建项目的时候，经常性会在package.json中看到 “devDependencies”里面配置项有 “@vue/compiler-sfc”: “^3.0.0”的配置项<br>那么我们就用它来测试一下,template文件被编译过后是什么样子呢？<br><strong>通过以下操作<strong></li>
 </ul>
 <ol>
 <li>首先我们需要创建一个文件夹,可手动创建也可通过mkdir的方式创建,接着我们把文件夹在终端中打开,推荐使用vscode工具,因为在vscode中集成了powershell（shell指令）。</li>
