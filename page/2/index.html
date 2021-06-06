@@ -143,6 +143,94 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh">
+    <link itemprop="mainEntityOfPage" href="https://lyyb.github.io/glennley.github.io/2021/05/27/macro-task/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/glennley.github.io/images/WechatIMG12.jpeg">
+      <meta itemprop="name" content="GlennLey">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="GlennLey's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/glennley.github.io/2021/05/27/macro-task/" class="post-title-link" itemprop="url">函数调用栈、宏任务（macro-task)队列和微任务(micro-task)队列</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-05-27 19:47:45 / Modified: 19:58:45" itemprop="dateCreated datePublished" datetime="2021-05-27T19:47:45+08:00">2021-05-27</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><strong>从一道面试题说起</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">console.log(1)</span><br><span class="line"></span><br><span class="line">setTimeout(function() &#123;</span><br><span class="line">  console.log(2)</span><br><span class="line">&#125;)</span><br><span class="line">new Promise(function (resolve) &#123;</span><br><span class="line">  console.log(3)</span><br><span class="line">  resolve()</span><br><span class="line"> &#125;).then(function () &#123;</span><br><span class="line">  console.log(4)</span><br><span class="line">&#125;).then(function() &#123;</span><br><span class="line">  console.log(5)</span><br><span class="line">&#125;)</span><br><span class="line">console.log(6)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1、3、6、4、5、2</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>在此之前 需要把函数调用栈、宏任务（macro-task)队列和微任务(micro-task)队列 三者搞明白！！</p>
+</li>
+<li><p>调用栈<br>当引擎第一次遇到 JS 代码时，会产生一个全局执行上下文并压入调用栈。后面每遇到一个函数调用，就会往栈中压入一个新的函数上下文。JS引擎会执行栈顶的函数，执行完毕后，弹出对应的上下文</p>
+</li>
+</ul>
+<p>一句话：如果你有一坨需要被执行的逻辑，它首先需要被推入函数调用栈，后续才能被执行。函数调用栈是个干活的地方，它会真刀真枪地给你执行任务。</p>
+<p>那么问题来了！宏任务队列、微任务队列又是啥？</p>
+<p>JS 的特性就是单线程+异步。在JS中，咱们有一些任务，比如说上面咱们塞进 setTimeout 里那个任务，再比如说你在 Promise 里面塞进 then 里面那个任务——这些任务是异步的，它们不需要立刻被执行，所以它们在刚刚被派发的时候，并不具备进入调用栈的“资格”。</p>
+<p>这暂时没资格咋整呢？<br>排队等呗！<br>于是这些待执行的任务，按照一定的规则，乖乖排起长队，等待着被推入调用栈的时刻到来——这个队列，就叫做“任务队列”。</p>
+<ul>
+<li>所谓“宏任务”与“微任务”，是对任务的进一步细分。</li>
+</ul>
+<p>常见的宏任务比如： setTimeout、setInterval、 setImmediate、 script（整体代码）、I/O 操作等。<br>常见的微任务比如: process.nextTick、Promise、MutationObserver 等<br>注意：script（整体代码）它也是一个宏任务；此外，宏任务中的 setImmediate、微任务中的 process.nextTick 这些都是 Node 独有的。</p>
+<ul>
+<li>循环过程解读<br>基于对 宏任务 和 微任务 的认知，我们来走一遍完整的事件循环过程。<br>一个完整的 Event Loop 过程，可以概括为以下阶段：<pre><code>1. 执行并出队一个  宏任务。注意如果是初始状态：调用栈空。micro 队列空，宏任务 队列里有且只有一个 script 脚本（整体代码）。这时首先执行并出队的就是 script 脚本；
+2.全局上下文（script 标签）被推入调用栈，同步代码执行。在执行的过程中，通过对一些接口的调用，可以产生新的宏任务 与 微任务，它们会分别被推入各自的任务队列里。这个过程本质上是队列的宏任务的执行和出队的过程；
+3.上一步我们出队的是一个  宏任务这一步我们处理的是 微任务。但需要注意的是：当宏任务出队时，任务是一个一个执行的；而微任务出队时，任务是一队一队执行的。因此，我们处理 micro 队列这一步，会逐个执行队列中的任务并把它出队，直到队列被清空；
+4.执行渲染操作，更新界面；
+5.检查是否存在 Web worker 任务，如果有，则对其进行处理。
+</code></pre>
+</li>
+</ul>
+<p>总结一下：<br>微任务和宏任务是绑定的，每个宏任务在执行时，会创建自己的微任务队列。</p>
+<p>微任务的执行时长会影响当前宏任务的时长。比如一个宏任务在执行过程中，产生了10个微任务，执行每个微任务的时间是10ms，那么执行这10个微任务的时间就是100ms，也可以说这10个微任务让宏任务的执行时间延长了100ms。</p>
+<p>在一个宏任务中，分别创建一个用于回调的宏任务和微任务，无论什么情况下，微任务都早于宏任务执行。<br>    执行顺序: sync同步代码 =&gt;  promise =&gt; then  =&gt; setTimeout</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh">
     <link itemprop="mainEntityOfPage" href="https://lyyb.github.io/glennley.github.io/2021/05/27/js/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -362,7 +450,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/glennley.github.io/archives">
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
