@@ -174,7 +174,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-06-07 00:12:16" itemprop="dateModified" datetime="2021-06-07T00:12:16+08:00">2021-06-07</time>
+                <time title="Modified: 2021-06-07 00:13:52" itemprop="dateModified" datetime="2021-06-07T00:13:52+08:00">2021-06-07</time>
               </span>
 
           
@@ -219,7 +219,7 @@
 <p>改变函数的this指向</p>
 <ol>
 <li><p>改变后直接进行函数调用<br>call<br>apply</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fn.call(target, arg1, arg2)</span><br><span class="line"></span><br><span class="line">fn.apply(target, [arg1, arg2])</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fn.call(target, arg1, arg2)</span><br><span class="line">fn.apply(target, [arg1, arg2])</span><br></pre></td></tr></table></figure>
 <p>call 和 apply 之间的区别，则体现在对入参的要求上。<br>前者只需要将目标函数的入参逐个传入即可，后者则希望入参以数组形式被传入。</p>
 </li>
 <li><p>仅仅改变，不执行</p>
@@ -228,7 +228,7 @@
 <p>bind</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fn.bind(target, arg1, arg2 )</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>只是需要注意的是使用bind如果需要执行，需要加上调用</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fn.bind(target, arg1, arg2 )()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fn.bind(target, arg1, arg2 )()</span><br></pre></td></tr></table></figure>
 
 
       
