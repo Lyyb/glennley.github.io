@@ -174,7 +174,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-06-07 00:16:27" itemprop="dateModified" datetime="2021-06-07T00:16:27+08:00">2021-06-07</time>
+                <time title="Modified: 2021-06-07 00:16:54" itemprop="dateModified" datetime="2021-06-07T00:16:54+08:00">2021-06-07</time>
               </span>
 
           
@@ -209,7 +209,7 @@
 <p><strong>补充形成IIFE的常见方法</strong></p>
 <ol>
 <li>函数不能直接加圆括号调用。</li>
-<li>函数必须转为函数表达式才能被调用</li>
+<li>函数必须转为函数表达式才能被调用。</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(function()&#123; alert(1); &#125;)();</span><br><span class="line">!function()&#123; alert(1); &#125;();</span><br><span class="line">+function()&#123; alert(1); &#125;();</span><br><span class="line">-function()&#123; alert(1); &#125;();</span><br><span class="line">~function()&#123; alert(1); &#125;();</span><br></pre></td></tr></table></figure>
 
@@ -398,10 +398,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-06-06 23:06:20 / Modified: 23:43:02" itemprop="dateCreated datePublished" datetime="2021-06-06T23:06:20+08:00">2021-06-06</time>
+              <time title="Created: 2021-06-06 23:06:20" itemprop="dateCreated datePublished" datetime="2021-06-06T23:06:20+08:00">2021-06-06</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-06-07 00:17:48" itemprop="dateModified" datetime="2021-06-07T00:17:48+08:00">2021-06-07</time>
+              </span>
 
           
 
@@ -416,41 +422,41 @@
       
           <p><strong>从变量提升说起</strong></p>
 <p>在 ES5的“var” 时代，有一个特别的现象：不管我们的变量声明是写在程序的哪个角落，最后都会被提到作用域的顶端去。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">console.log(num)   //undefined</span><br><span class="line">var num = 1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">console.log(num)   //undefined</span><br><span class="line">var num = 1</span><br></pre></td></tr></table></figure>
 <p><strong>神奇的变量提升</strong></p>
 <p>这段代码不会报错，反而会输出一个 undefined。这就是因为变量的声明被“提升”了，它等价于这样：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var num</span><br><span class="line">console.log(num)  // undefined</span><br><span class="line">num = 1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var num</span><br><span class="line">console.log(num)  // undefined</span><br><span class="line">num = 1</span><br></pre></td></tr></table></figure>
 
 <p>上面这个例子里，我们看到 num 作为全局变量会被提升到全局作用域的头部。在函数作用域里，也会有类似的现象发生：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function getNum() &#123;</span><br><span class="line">  console.log(num) </span><br><span class="line">  var num = 1  </span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function getNum() &#123;</span><br><span class="line">  console.log(num) </span><br><span class="line">  var num = 1  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>这里同样会输出 undefined，这是因为函数内部的变量声明会被提升至函数作用域的顶端。上面这个例子其实等价于：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">function getNum() &#123;</span><br><span class="line">  var num </span><br><span class="line">  console.log(num) </span><br><span class="line">  num = 1  </span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function getNum() &#123;</span><br><span class="line">  var num </span><br><span class="line">  console.log(num) </span><br><span class="line">  num = 1  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong>变量提升的原理</strong></p>
 <p>事实上，JS也是有编译阶段的，它和传统语言的区别在于，JS不会早早地把编译工作做完，而是一边编译一边执行。简单来说，所有的JS代码片段在执行之前都会被编译，只是这个编译的过程非常短暂（可能就只有几微妙、或者更短的时间），紧接着这段代码就会被执行。</p>
 <p>没错，JS 和其他语言一样，都要经历编译和执行阶段。正是在这个短暂的编译阶段里，JS 引擎会搜集所有的变量声明，并且提前让声明生效。至于剩下的语句，则需要等到执行阶段、等到执行到具体的某一句的时候才会生效。这就是变量提升背后的机制。</p>
 <p><strong>被禁用的变量提升 </strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">console.log(num) </span><br><span class="line">let num = 1</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">VM324:1 Uncaught ReferenceError: num is not defined</span><br><span class="line">    at &lt;anonymous&gt;:1:13</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">console.log(num) </span><br><span class="line">let num = 1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">VM324:1 Uncaught ReferenceError: </span><br><span class="line">num is not defined</span><br><span class="line">    at &lt;anonymous&gt;:1:13</span><br></pre></td></tr></table></figure>
 
 <p>理解 let 的时候可以参考 var。let 和 var 非常相似，<br>let 区别于 var 的最关键的地方在于：当我们用 let 声明变量时<br>，变量会被绑定到块作用域上，而 var 是不感知块作用域的。</p>
 <p>值得注意的是，这个规则在声明引用类型时有点不同——引用类型的属性值<br>（包括数组的元素）可以被更改，只要你不修改引用的指向。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const me = &#123;</span><br><span class="line">  name: &#x27;Glennley&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">me.name = &#x27;Bear&#x27; // 没问题</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">const me = &#123;</span><br><span class="line">  name: &#x27;Glennley&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">me.name = &#x27;Bear&#x27; // 没问题</span><br></pre></td></tr></table></figure>
 
 <p>像这样修改 name 这个属性值，而 me 对象的引用仍然指向<br>原有的内存地址，这种更改就可以被接受。而类似这种：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">const me = &#123;</span><br><span class="line">  name: &#x27;Glennley&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">me = &#123;</span><br><span class="line">  name: &#x27;Bear&#x27;</span><br><span class="line">&#125; // 报错</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">const arr = [1,2,3,4]</span><br><span class="line">arr.push(2)</span><br><span class="line"> // arr [1, 2, 3, 4, 2]</span><br><span class="line">arr.slice(0,1)  //该方法不会改变原数组，而是返回一个子数组</span><br><span class="line">[1]  //返回</span><br><span class="line">arr.splice(0,1) //该方法向或者从数组中添加或者删除项目</span><br><span class="line">//返回被删除的项目。（该方法会改变原数组）</span><br><span class="line">[1]</span><br><span class="line">[2, 3, 4, 2]</span><br><span class="line">const arrObj = &#123;a:1,b:2&#125;</span><br><span class="line">arrObj.a = 2</span><br><span class="line">2</span><br><span class="line">arrObj.d = &#x27;c:3&#x27;</span><br><span class="line">&quot;c:3&quot;</span><br><span class="line">arrObj</span><br><span class="line">&#123;a: 2, b: 2, d: &quot;c:3&quot;&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">const arr = [1,2,3,4]</span><br><span class="line">arr.push(2)</span><br><span class="line"> // arr [1, 2, 3, 4, 2]</span><br><span class="line">arr.slice(0,1)  //该方法不会改变原数组，而是返回一个子数组</span><br><span class="line">[1]  //返回</span><br><span class="line">arr.splice(0,1) //该方法向或者从数组中添加或者删除项目</span><br><span class="line">//返回被删除的项目。（该方法会改变原数组）</span><br><span class="line">[1]</span><br><span class="line">[2, 3, 4, 2]</span><br><span class="line">const arrObj = &#123;a:1,b:2&#125;</span><br><span class="line">arrObj.a = 2</span><br><span class="line">2</span><br><span class="line">arrObj.d = &#x27;c:3&#x27;</span><br><span class="line">&quot;c:3&quot;</span><br><span class="line">arrObj</span><br><span class="line">&#123;a: 2, b: 2, d: &quot;c:3&quot;&#125;</span><br></pre></td></tr></table></figure>
 
 
 <p><strong> 暂时性死区 </strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var me = &#x27;glennley&#x27;;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">	me = &#x27;bear&#x27;;</span><br><span class="line">	let me;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var me = &#x27;glennley&#x27;;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">	me = &#x27;bear&#x27;;</span><br><span class="line">	let me;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>这样的代码也经常作为面试题来出。<br>面试官会问你：这段代码的运行结果是啥？ 事实上，<br>这段代码啥也运行不出来，它会报错：</p>
 <p>这是因为 ES6 中有明确的规定：如果区块中存在 let 和 const 命令，这个区块对这些命令声明的变量，从一开始就形成了封闭作用域。假如我们尝试在声明前去使用这类变量，就会报错。<br>这一段会报错的危险区域，有一个专属的名字，叫”暂时性死区“。在下面 demo 中，me = ‘glennley’  区域就是暂时性死区</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    me = &#x27;glennley&#x27;   //即暂时性死区</span><br><span class="line">    let me;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    me = &#x27;glennley&#x27;   //即暂时性死区</span><br><span class="line">    let me;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
