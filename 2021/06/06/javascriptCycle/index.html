@@ -22,19 +22,19 @@
     var CONFIG = {"hostname":"lyyb.github.io","root":"/glennley.github.io/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="从一道面试题说起 12345678910111213141516console.log(1)setTimeout(function() &amp;#123;  console.log(2)&amp;#125;)new Promise(function (resolve) &amp;#123;  console.log(3)  resolve() &amp;#125;).then(function () &amp;#123;  conso">
+  <meta name="description" content="写在前面 JavaScript 是弱类型语言，在运行时才能确定变量类型。即使是如今流行的 TypeScript，也只是增加了编译时（编译成 JavaScript）的类型检测（对于编译器相信大家都有所了解，代码编译过程中编译器会进行词法分析、语法分析、语义分析、生成 AST 等处理）。 同样，JavaScript 引擎在执行 JavaScript 代码时，也会从上到下进行词法分析、语法分析、语义分析">
 <meta property="og:type" content="article">
-<meta property="og:title" content="函数调用栈、宏任务（macro-task)队列和微任务(micro-task)队列">
-<meta property="og:url" content="https://lyyb.github.io/glennley.github.io/2021/05/27/macro-task/index.html">
+<meta property="og:title" content="JavaScript 代码运行的各个阶段(生命周期)">
+<meta property="og:url" content="https://lyyb.github.io/glennley.github.io/2021/06/06/javascriptCycle/index.html">
 <meta property="og:site_name" content="GlennLey&#39;s Blog">
-<meta property="og:description" content="从一道面试题说起 12345678910111213141516console.log(1)setTimeout(function() &amp;#123;  console.log(2)&amp;#125;)new Promise(function (resolve) &amp;#123;  console.log(3)  resolve() &amp;#125;).then(function () &amp;#123;  conso">
+<meta property="og:description" content="写在前面 JavaScript 是弱类型语言，在运行时才能确定变量类型。即使是如今流行的 TypeScript，也只是增加了编译时（编译成 JavaScript）的类型检测（对于编译器相信大家都有所了解，代码编译过程中编译器会进行词法分析、语法分析、语义分析、生成 AST 等处理）。 同样，JavaScript 引擎在执行 JavaScript 代码时，也会从上到下进行词法分析、语法分析、语义分析">
 <meta property="og:locale">
-<meta property="article:published_time" content="2021-05-27T11:47:45.000Z">
-<meta property="article:modified_time" content="2021-05-27T11:58:45.000Z">
+<meta property="article:published_time" content="2021-06-06T15:33:00.000Z">
+<meta property="article:modified_time" content="2021-06-06T15:42:03.000Z">
 <meta property="article:author" content="GlennLey">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://lyyb.github.io/glennley.github.io/2021/05/27/macro-task/">
+<link rel="canonical" href="https://lyyb.github.io/glennley.github.io/2021/06/06/javascriptCycle/">
 
 
 <script id="page-configurations">
@@ -47,7 +47,7 @@
   };
 </script>
 
-  <title>函数调用栈、宏任务（macro-task)队列和微任务(micro-task)队列 | GlennLey's Blog</title>
+  <title>JavaScript 代码运行的各个阶段(生命周期) | GlennLey's Blog</title>
   
 
 
@@ -148,7 +148,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh">
-    <link itemprop="mainEntityOfPage" href="https://lyyb.github.io/glennley.github.io/2021/05/27/macro-task/">
+    <link itemprop="mainEntityOfPage" href="https://lyyb.github.io/glennley.github.io/2021/06/06/javascriptCycle/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/glennley.github.io/images/WechatIMG12.jpeg">
@@ -161,7 +161,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          函数调用栈、宏任务（macro-task)队列和微任务(micro-task)队列
+          JavaScript 代码运行的各个阶段(生命周期)
         </h1>
 
         <div class="post-meta">
@@ -172,7 +172,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-05-27 19:47:45 / Modified: 19:58:45" itemprop="dateCreated datePublished" datetime="2021-05-27T19:47:45+08:00">2021-05-27</time>
+              <time title="Created: 2021-06-06 23:33:00 / Modified: 23:42:03" itemprop="dateCreated datePublished" datetime="2021-06-06T23:33:00+08:00">2021-06-06</time>
             </span>
 
           
@@ -193,36 +193,66 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><strong>从一道面试题说起</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">console.log(1)</span><br><span class="line"></span><br><span class="line">setTimeout(function() &#123;</span><br><span class="line">  console.log(2)</span><br><span class="line">&#125;)</span><br><span class="line">new Promise(function (resolve) &#123;</span><br><span class="line">  console.log(3)</span><br><span class="line">  resolve()</span><br><span class="line"> &#125;).then(function () &#123;</span><br><span class="line">  console.log(4)</span><br><span class="line">&#125;).then(function() &#123;</span><br><span class="line">  console.log(5)</span><br><span class="line">&#125;)</span><br><span class="line">console.log(6)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1、3、6、4、5、2</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>在此之前 需要把函数调用栈、宏任务（macro-task)队列和微任务(micro-task)队列 三者搞明白！！</p>
+        <p><strong>写在前面</strong></p>
+<p>JavaScript 是弱类型语言，在运行时才能确定变量类型。即使是如今流行的 TypeScript，也只是增加了编译时（编译成 JavaScript）的类型检测（对于编译器相信大家都有所了解，代码编译过程中编译器会进行词法分析、语法分析、语义分析、生成 AST 等处理）。</p>
+<p>同样，JavaScript 引擎在执行 JavaScript 代码时，也会从上到下进行词法分析、语法分析、语义分析等处理，并在代码解析完成后生成 AST（抽象语法树），最终根据 AST 生成 CPU 可以执行的机器码并执行。</p>
+<p>这个过程，我们后面统一描述为语法分析阶段。除了语法分析阶段，JavaScript 引擎在执行代码时还会进行其他的处理。以 V8 引擎为例，在 V8 引擎中 JavaScript 代码的运行过程主要分成三个阶段。</p>
+<ol>
+<li><p>语法分析阶段。<br>该阶段会对代码进行语法分析，检查是否有语法错误（SyntaxError），如果发现语法错误，会在控制台抛出异常并终止执行。</p>
 </li>
-<li><p>调用栈<br>当引擎第一次遇到 JS 代码时，会产生一个全局执行上下文并压入调用栈。后面每遇到一个函数调用，就会往栈中压入一个新的函数上下文。JS引擎会执行栈顶的函数，执行完毕后，弹出对应的上下文</p>
+<li><p>编译阶段。<br>该阶段会进行执行上下文（Execution Context）的创建，包括创建变量对象、建立作用域链、确定 this 的指向等。每进入一个不同的运行环境时，V8 引擎都会创建一个新的执行上下文。</p>
 </li>
-</ul>
-<p>一句话：如果你有一坨需要被执行的逻辑，它首先需要被推入函数调用栈，后续才能被执行。函数调用栈是个干活的地方，它会真刀真枪地给你执行任务。</p>
-<p>那么问题来了！宏任务队列、微任务队列又是啥？</p>
-<p>JS 的特性就是单线程+异步。在JS中，咱们有一些任务，比如说上面咱们塞进 setTimeout 里那个任务，再比如说你在 Promise 里面塞进 then 里面那个任务——这些任务是异步的，它们不需要立刻被执行，所以它们在刚刚被派发的时候，并不具备进入调用栈的“资格”。</p>
-<p>这暂时没资格咋整呢？<br>排队等呗！<br>于是这些待执行的任务，按照一定的规则，乖乖排起长队，等待着被推入调用栈的时刻到来——这个队列，就叫做“任务队列”。</p>
-<ul>
-<li>所谓“宏任务”与“微任务”，是对任务的进一步细分。</li>
-</ul>
-<p>常见的宏任务比如： setTimeout、setInterval、 setImmediate、 script（整体代码）、I/O 操作等。<br>常见的微任务比如: process.nextTick、Promise、MutationObserver 等<br>注意：script（整体代码）它也是一个宏任务；此外，宏任务中的 setImmediate、微任务中的 process.nextTick 这些都是 Node 独有的。</p>
-<ul>
-<li>循环过程解读<br>基于对 宏任务 和 微任务 的认知，我们来走一遍完整的事件循环过程。<br>一个完整的 Event Loop 过程，可以概括为以下阶段：<pre><code>1. 执行并出队一个  宏任务。注意如果是初始状态：调用栈空。micro 队列空，宏任务 队列里有且只有一个 script 脚本（整体代码）。这时首先执行并出队的就是 script 脚本；
-2.全局上下文（script 标签）被推入调用栈，同步代码执行。在执行的过程中，通过对一些接口的调用，可以产生新的宏任务 与 微任务，它们会分别被推入各自的任务队列里。这个过程本质上是队列的宏任务的执行和出队的过程；
-3.上一步我们出队的是一个  宏任务这一步我们处理的是 微任务。但需要注意的是：当宏任务出队时，任务是一个一个执行的；而微任务出队时，任务是一队一队执行的。因此，我们处理 micro 队列这一步，会逐个执行队列中的任务并把它出队，直到队列被清空；
-4.执行渲染操作，更新界面；
-5.检查是否存在 Web worker 任务，如果有，则对其进行处理。
-</code></pre>
+<li><p>执行阶段。<br>将编译阶段中创建的执行上下文压入调用栈，并成为正在运行的执行上下文，代码执行结束后，将其弹出调用栈。</p>
 </li>
-</ul>
-<p>总结一下：<br>微任务和宏任务是绑定的，每个宏任务在执行时，会创建自己的微任务队列。</p>
-<p>微任务的执行时长会影响当前宏任务的时长。比如一个宏任务在执行过程中，产生了10个微任务，执行每个微任务的时间是10ms，那么执行这10个微任务的时间就是100ms，也可以说这10个微任务让宏任务的执行时间延长了100ms。</p>
-<p>在一个宏任务中，分别创建一个用于回调的宏任务和微任务，无论什么情况下，微任务都早于宏任务执行。<br>    执行顺序: sync同步代码 =&gt;  promise =&gt; then  =&gt; setTimeout</p>
+</ol>
+<p>其中，语法分析阶段属于编译器通用内容，就不再赘述。前面提到的执行环境、词法环境、作用域、执行上下文等内容都是在编译和执行阶段中产生的概念。</p>
+<p>JavaScript 在运行过程中会产生一个调用栈，调用栈遵循 LIFO（先进后出，后进先出）原则即可。</p>
+<p><strong>执行上下文的创建</strong></p>
+<p>执行上下文的创建离不开 JavaScript 的运行环境，JavaScript 运行环境包括全局环境、函数环境和eval，其中全局环境和函数环境的创建过程如下：</p>
+<p>第一次载入 JavaScript 代码时，首先会创建一个全局环境。全局环境位于最外层，直到应用程序退出后（例如关闭浏览器和网页）才会被销毁。</p>
+<p>每个函数都有自己的运行环境，当函数被调用时，则会进入该函数的运行环境。当该环境中的代码被全部执行完毕后，该环境会被销毁。不同的函数运行环境不一样，即使是同一个函数，在被多次调用时也会创建多个不同的函数环境。</p>
+<p>在不同的运行环境中，变量和函数可访问的其他数据范围不同，环境的行为（比如创建和销毁）也有所区别。而每进入一个不同的运行环境时，JavaScript 都会创建一个新的执行上下文，该过程包括</p>
+<ol>
+<li><p>建立作用域链（Scope Chain）；</p>
+</li>
+<li><p>创建变量对象（Variable Object，简称 VO）；</p>
+</li>
+<li><p>确定 this 的指向。</p>
+</li>
+</ol>
+<p>由于建立作用域链过程中会涉及变量对象的概念，因此我们先来看看变量对象的创建，再看建立作用域链和确定 this 的指向。</p>
+<p><strong>创建变量对象</strong></p>
+<p>什么是变量对象呢？每个执行上下文都会有一个关联的变量对象，该对象上会保存这个上下文中定义的所有变量和函数。</p>
+<p>而在浏览器中，全局环境的变量对象是window对象，因此所有的全局变量和函数都是作为window对象的属性和方法创建的。相应的，在 Node 中全局环境的变量对象则是global对象。</p>
+<p>对于变量声明：此时会给变量分配内存，并将其初始化为undefined（该过程只进行定义声明，执行阶段才执行赋值语句）。</p>
+<p>对于函数声明：此时会在内存里创建函数对象，并且直接初始化为该函数对象。</p>
+<p>上述变量声明和函数声明的处理过程，便是我们常说的变量提升和函数提升，其中函数声明提升会优先于变量声明提升。因为变量提升容易带来变量在预期外被覆盖掉的问题，同时还可能导致本应该被销毁的变量没有被销毁等情况。因此 ES6 中引入了let和const关键字，从而使 JavaScript 也拥有了块级作用域。</p>
+<p>或许你会感到疑惑，JavaScript 是怎么支持块级作用域的呢？这就涉及作用域的概念。</p>
+<p>在各类编程语言中，作用域分为静态作用域和动态作用域。JavaScript 采用的是词法作用域（Lexical Scoping），也就是静态作用域。词法作用域中的变量，在编译过程中会产生一个确定的作用域。</p>
+<p>到这里，或许你对会词法作用域、作用域、执行上下文、词法环境之间的关系依然感到混乱，没关系，一起梳理梳理下。</p>
+<p>上述提到，词法作用域中的变量，在编译过程中会产生一个确定的作用域，这个作用域即当前的执行上下文，在 ES5 后我们使用词法环境（Lexical Environment）替代作用域来描述该执行上下文。因此，词法环境可理解为我们常说的作用域，同样也指当前的执行上下文（注意，是当前的执行上下文）。</p>
+<p>在 JavaScript 中，词法环境又分为词法环境（Lexical Environment）和变量环境（Variable Environment）两种，其中：</p>
+<ol>
+<li><p>变量环境用来记录var/function等变量声明；</p>
+</li>
+<li><p>词法环境是用来记录let/const/class等变量声明。</p>
+</li>
+</ol>
+<p>也就是说，创建变量过程中会进行函数提升和变量提升，JavaScript 会通过词法环境来记录函数和变量声明。通过使用两个词法环境（而不是一个）分别记录不同的变量声明内容，JavaScript 实现了支持块级作用域的同时，不影响原有的变量声明和函数声明。</p>
+<p>这就是创建变量的过程，它属于执行上下文创建中的一环。创建变量的过程会产生作用域，作用域也被称为词法环境，那词法环境是由什么组成的呢？下面我结合作用域链的建立过程一起来进行分析。</p>
+<p><strong>建立作用域链</strong></p>
+<p>作用域链，顾名思义，就是将各个作用域通过某种方式连接在一起。</p>
+<p>作用域就是词法环境，而词法环境由两个成员组成。</p>
+<p>环境记录（Environment Record）：用于记录自身词法环境中的变量对象。</p>
+<p>外部词法环境引用（Outer Lexical Environment）：记录外层词法环境的引用。</p>
+<p>通过外部词法环境的引用，作用域可以层层拓展，建立起从里到外延伸的一条作用域链。当某个变量无法在自身词法环境记录中找到时，可以根据外部词法环境引用向外层进行寻找，直到最外层的词法环境中外部词法环境引用为null，这便是作用域链的变量查询。</p>
+<p>那么，这个外部词法环境引用又是怎样指向外层呢？我们来看看 JavaScript 中是如何通过外部词法环境引用来创建作用域的。</p>
+<p>为了方便描述，我们将 JavaScript 代码运行过程分为定义期和执行期，前面提到的编译阶段则属于定义期。</p>
+<p>在定义期（编译阶段）：该对象值仍为undefined，且处于不可访问的状态。</p>
+<p>进入执行期（执行阶段）：VO 被激活，其中变量属性会进行赋值。</p>
+<p>实际上在执行的时候，除了 VO 被激活，活动对象还会添加函数执行时传入的参数和arguments这个特殊对象</p>
+<p>从当前词法环境开始，沿着作用域链逐级向外层寻找环境记录，直到找到同名变量为止；</p>
+<p>找到后不再继续遍历，找不到就报错。</p>
 
     </div>
 
@@ -238,13 +268,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/glennley.github.io/2021/05/27/js/" rel="prev" title="重绘与重排(回流)">
-      <i class="fa fa-chevron-left"></i> 重绘与重排(回流)
+    <a href="/glennley.github.io/2021/06/06/variable/" rel="prev" title="变量提升与暂时性死区">
+      <i class="fa fa-chevron-left"></i> 变量提升与暂时性死区
     </a></div>
-      <div class="post-nav-item">
-    <a href="/glennley.github.io/2021/05/27/promise/" rel="next" title="说说你对promise的理解">
-      说说你对promise的理解 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
