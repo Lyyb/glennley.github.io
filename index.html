@@ -168,7 +168,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-06-06 23:33:00 / Modified: 23:42:03" itemprop="dateCreated datePublished" datetime="2021-06-06T23:33:00+08:00">2021-06-06</time>
+              <time title="Created: 2021-06-06 23:33:00 / Modified: 23:46:48" itemprop="dateCreated datePublished" datetime="2021-06-06T23:33:00+08:00">2021-06-06</time>
             </span>
 
           
@@ -210,6 +210,14 @@
 </li>
 </ol>
 <p>由于建立作用域链过程中会涉及变量对象的概念，因此我们先来看看变量对象的创建，再看建立作用域链和确定 this 的指向。</p>
+<p>在全局环境中，this指向全局对象（在浏览器中为window）</p>
+<p>在函数内部，this的值取决于函数被调用的方式</p>
+<p>函数作为对象的方法被调用，this指向调用这个方法的对象</p>
+<p>函数用作构造函数时（使用new关键字），它的this被绑定到正在构造的新对象</p>
+<p>在类的构造函数中，this是一个常规对象，类中所有非静态的方法都会被添加到this的原型中</p>
+<p>在箭头函数中，this指向它被创建时的环境</p>
+<p>使用apply、call、bind等方式调用：根据 API 不同，可切换函数执行的上下文环境，即this绑定的对象</p>
+<p>可以看到，this在不同的情况下会有不同的指向，在 ES6 箭头函数还没出现之前，为了能正确获取某个运行环境下this对象，我们常常会使用var that = this;、var self = this;这样的代码将变量分配给this，便于使用。这种方式降低了代码可读性，因此如今这种做法不再被提倡，通过正确使用箭头函数，我们可以更好地管理作用域。</p>
 <p><strong>创建变量对象</strong></p>
 <p>什么是变量对象呢？每个执行上下文都会有一个关联的变量对象，该对象上会保存这个上下文中定义的所有变量和函数。</p>
 <p>而在浏览器中，全局环境的变量对象是window对象，因此所有的全局变量和函数都是作为window对象的属性和方法创建的。相应的，在 Node 中全局环境的变量对象则是global对象。</p>
